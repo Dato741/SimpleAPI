@@ -1,0 +1,26 @@
+GET http://localhost:5181/todos/
+
+###
+GET http://localhost:5181/todos/7
+
+###
+PUT http://localhost:5181/todos/14
+Content-Type: application/json
+
+{
+    "name": "Workout",
+    "iscompleted": true,
+    "priority": "High",
+    "duedate": "2025-03-25"
+}
+
+###
+POST http://localhost:5181/todos
+Content-Type: application/json
+
+{
+    "name": "Do Loundry",
+    "iscompleted": false,
+    "priority": "Medium",
+    "duedate": "2025-03-25"
+}
