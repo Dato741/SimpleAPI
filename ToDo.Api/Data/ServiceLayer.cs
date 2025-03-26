@@ -25,6 +25,12 @@ namespace ToDo.Api.Data
                          task.Name.Contains(searchName)).ToListAsync();
         }
 
+        //search method overload with ID
+        public async Task<ToDoTask> FindTodosAsync(int id)
+        {
+            return await _context.Tasks.FindAsync(id);
+        }
+
         public async Task AddTodoAsync(ToDoTask todo)
         {
             _context.Tasks.Add(todo);
@@ -37,9 +43,9 @@ namespace ToDo.Api.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteToDoAsync(ToDoTask todo)
+        public async Task DeleteToDoAsync(int id)
         {
-            _context.Tasks.Remove(todo);
+            _context.Tasks.Where(task => task.Id == id).ExecuteDelete();
             await _context.SaveChangesAsync();
         }
     }
