@@ -1,4 +1,7 @@
-GET http://localhost:5181/todos/
+GET http://localhost:5181/todos
+
+###
+GET http://localhost:5181/todos/duedate/true
 
 ###
 GET http://localhost:5181/todos/7
@@ -19,8 +22,11 @@ POST http://localhost:5181/todos
 Content-Type: application/json
 
 {
-    "name": "Do Loundry",
+    "name": "Shower",
     "iscompleted": false,
-    "priority": "Medium",
-    "duedate": "2025-03-25"
+    "priority": "High",
+    "duedate": "2025-03-30"
 }
+
+###
+DELETE http://localhost:5181/todos/15

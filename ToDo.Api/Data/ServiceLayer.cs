@@ -5,7 +5,7 @@ using ToDo.Api.Entities;
 
 namespace ToDo.Api.Data
 {
-    public class ToDoService
+    public class ToDoService : IToDoService
     {
         readonly ToDoListContext _context;
 
@@ -37,9 +37,10 @@ namespace ToDo.Api.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateToDoAsync(ToDoTask todo)
+        public async Task UpdateToDoAsync(ToDoTask currTask, ToDoTask updatedTask)
         {
-            _context.Entry(todo).CurrentValues.SetValues(todo);
+            updatedTask.Id = currTask.Id;
+            _context.Entry(currTask).CurrentValues.SetValues(updatedTask);
             await _context.SaveChangesAsync();
         }
 

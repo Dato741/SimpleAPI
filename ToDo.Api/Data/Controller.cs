@@ -3,33 +3,73 @@ using ToDo.Api.Entities;
 
 namespace ToDo.Api.Data
 {
+    [Route("todos")]
+    [ApiController]
     public class ToDoController : ControllerBase
     {
-        readonly ToDoService _toDoService;
+        readonly IToDoService _toDoService;
 
-        public ToDoController(ToDoService toDoService)
+        public ToDoController(IToDoService toDoService)
         {
             this._toDoService = toDoService;
         }
 
-        public async Task<IActionResult> GetTaskList(string sortBy = "", bool asc = false)
+        [HttpGet]
+        public async Task<IActionResult> GetTaskList()
+        {
+            List<ToDoTask> tasks = await _toDoService.GetAllTodos();
+            return Ok(tasks);
+        }
+
+        [HttpGet("{sortBy}/{asc}")]
+        public async Task<IActionResult> GetTaskListSorted(string sortBy = "", bool asc = false)
         {
             List<ToDoTask> tasks = await _toDoService.GetAllTodos();
 
             if (sortBy == "status")
             {
-                    tasks.Sort((a, b) =>
-                    {
-                        if (a.IsCompleted == b.IsCompleted)
-                            return a.DueDate.CompareTo(b.DueDate);
+                tasks.Sort((a, b) =>
+                {
+                    if (a.IsCompleted == b.IsCompleted)
+                        return a.DueDate.CompareTo(b.DueDate);
 
+                    if (asc)
                         return a.IsCompleted.CompareTo(b.IsCompleted);
-                    });
+                    else
+                        return b.IsCompleted.CompareTo(a.DueDate);
+                });
+            }
+            else if (sortBy == "priority")
+            {
+                tasks.Sort((a, b) =>
+                {
+                    if (a.Priority == b.Priority)
+                        return a.DueDate.CompareTo(b.DueDate);
+
+                    if (asc)
+                        return a.Priority.CompareTo(b.Priority);
+                    else
+                        return b.Priority.CompareTo(a.DueDate);
+                });
+            }
+            else if (sortBy == "duedate")
+            {
+                tasks.Sort((a, b) =>
+                {
+                    if (a.DueDate == b.DueDate)
+                        return a.Priority.CompareTo(b.Priority);
+
+                    if (asc)
+                        return a.DueDate.CompareTo(b.DueDate);
+                    else
+                        return b.DueDate.CompareTo(a.DueDate);
+                });
             }
 
             return Ok(tasks);
         }
 
+        [HttpGet("{searchName}")]
         public async Task<IActionResult> SearchTasks(string searchName)
         {
             List<ToDoTask> tasks = await _toDoService.FindTodosAsync(searchName);
@@ -39,6 +79,7 @@ namespace ToDo.Api.Data
             return Ok(tasks);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateTask(ToDoTask todo)
         {
             await _toDoService.AddTodoAsync(todo);
@@ -46,18 +87,20 @@ namespace ToDo.Api.Data
             return Ok(todo);
         }
 
-        public async Task<IActionResult> UpdateTask(int id, ToDoTask todo)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTask(int id, ToDoTask updatedTask)
         {
-            ToDoTask task = await _toDoService.FindTodosAsync(id);
+            ToDoTask currTask = await _toDoService.FindTodosAsync(id);
 
-            if (task is not null)
+            if (currTask is not null)
             {
-                await _toDoService.UpdateToDoAsync(task);
+                await _toDoService.UpdateToDoAsync(currTask, updatedTask);
             }
             
             return NoContent();
         }
 
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
             await _toDoService.DeleteToDoAsync(id);

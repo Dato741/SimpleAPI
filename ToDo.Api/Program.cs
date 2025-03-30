@@ -7,8 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connString = builder.Configuration.GetConnectionString("ToDoApp");
 builder.Services.AddSqlite<ToDoListContext>(connString);
 
-var app = builder.Build();
+builder.Services.AddControllers();
+builder.Services.AddScoped<ToDoListContext>();
+builder.Services.AddScoped<IToDoService, ToDoService>();
 
-app.MapToDoEndpoints();
+var app = builder.Build();
+app.MapControllers();
 
 app.Run();
