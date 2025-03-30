@@ -12,9 +12,21 @@ namespace ToDo.Api.Data
             this._toDoService = toDoService;
         }
 
-        public async Task<IActionResult> GetTaskList()
+        public async Task<IActionResult> GetTaskList(string sortBy = "", bool asc = false)
         {
             List<ToDoTask> tasks = await _toDoService.GetAllTodos();
+
+            if (sortBy == "status")
+            {
+                    tasks.Sort((a, b) =>
+                    {
+                        if (a.IsCompleted == b.IsCompleted)
+                            return a.DueDate.CompareTo(b.DueDate);
+
+                        return a.IsCompleted.CompareTo(b.IsCompleted);
+                    });
+            }
+
             return Ok(tasks);
         }
 
