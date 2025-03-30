@@ -21,8 +21,9 @@ namespace ToDo.Api.Data
             return Ok(tasks);
         }
 
-        [HttpGet("{sortBy}/{asc}")]
-        public async Task<IActionResult> GetTaskListSorted(string sortBy = "", bool asc = false)
+        [HttpGet]
+        public async Task<IActionResult> GetTaskListSorted(string sortBy = "duedate", 
+                                                           bool asc = false)
         {
             List<ToDoTask> tasks = await _toDoService.GetAllTodos();
 
@@ -69,7 +70,7 @@ namespace ToDo.Api.Data
             return Ok(tasks);
         }
 
-        [HttpGet("{searchName}")]
+        [HttpGet("searchByName")]
         public async Task<IActionResult> SearchTasks(string searchName)
         {
             List<ToDoTask> tasks = await _toDoService.FindTodosAsync(searchName);
@@ -77,6 +78,16 @@ namespace ToDo.Api.Data
             if (tasks.Count == 0) return NotFound();
 
             return Ok(tasks);
+        }
+
+        [HttpGet("searchById")]
+        public async Task<IActionResult> SearchTasks(int id)
+        {
+            ToDoTask task = await _toDoService.FindTodosAsync(id);
+
+            if (task is null) return NotFound();
+
+            return Ok(task);
         }
 
         [HttpPost]

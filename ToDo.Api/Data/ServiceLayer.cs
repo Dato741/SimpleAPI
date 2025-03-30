@@ -22,7 +22,7 @@ namespace ToDo.Api.Data
         public async Task<List<ToDoTask>> FindTodosAsync(string searchName)
         {
             return await _context.Tasks.Where(task =>
-                         task.Name.Contains(searchName)).ToListAsync();
+                         task.Name.ToLower().Contains(searchName.ToLower())).ToListAsync();
         }
 
         //search method overload with ID

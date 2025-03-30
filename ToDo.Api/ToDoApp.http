@@ -4,17 +4,17 @@ GET http://localhost:5181/todos
 GET http://localhost:5181/todos/duedate/true
 
 ###
-GET http://localhost:5181/todos/7
+GET http://localhost:5181/todos/Code
 
 ###
-PUT http://localhost:5181/todos/14
+PUT http://localhost:5181/todos/23
 Content-Type: application/json
 
 {
-    "name": "Workout",
-    "iscompleted": true,
-    "priority": "High",
-    "duedate": "2025-03-25"
+    "name": "Wash dishes",
+    "iscompleted": false,
+    "priority": "Medium",
+    "duedate": "2025-03-30"
 }
 
 ###
@@ -29,4 +29,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5181/todos/15
+DELETE http://localhost:5181/todos/24
