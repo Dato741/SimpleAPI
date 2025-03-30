@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDo.Api.Data;
 using ToDo.Api.Entities;
 
-namespace ToDo.Api.Data
+namespace ToDo.Api.Services
 {
     public class ToDoService : IToDoService
     {
@@ -11,7 +11,7 @@ namespace ToDo.Api.Data
 
         public ToDoService(ToDoListContext context)
         {
-            this._context = context;
+            _context = context;
         }
 
         public async Task<List<ToDoTask>> GetAllTodos()

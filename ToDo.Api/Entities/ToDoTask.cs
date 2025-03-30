@@ -7,7 +7,7 @@ namespace ToDo.Api.Entities
         public int Id { get; set; }
         public required string Name { get; set; }
         public bool IsCompleted { get; set; }
-        public string Priority { get; set; } = "Low";
+        public int Priority { get; set; }
         public DateOnly DueDate { get; set; }
     }
 }

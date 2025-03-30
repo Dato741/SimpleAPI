@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using ToDo.Api.Data;
-using ToDo.Api.Endpoints;
+using ToDo.Api.Controllers;
+using ToDo.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

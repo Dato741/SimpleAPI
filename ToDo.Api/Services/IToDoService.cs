@@ -1,6 +1,6 @@
 ﻿using ToDo.Api.Entities;
 
-namespace ToDo.Api.Data
+namespace ToDo.Api.Services
 {
     public interface IToDoService
     {

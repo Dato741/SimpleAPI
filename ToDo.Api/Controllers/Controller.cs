@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ToDo.Api.Dtos;
 using ToDo.Api.Entities;
+using ToDo.Api.Services;
+using ToDo.Api.Mappings;
 
-namespace ToDo.Api.Data
+namespace ToDo.Api.Controllers
 {
     [Route("todos")]
     [ApiController]
@@ -11,18 +14,11 @@ namespace ToDo.Api.Data
 
         public ToDoController(IToDoService toDoService)
         {
-            this._toDoService = toDoService;
+            _toDoService = toDoService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTaskList()
-        {
-            List<ToDoTask> tasks = await _toDoService.GetAllTodos();
-            return Ok(tasks);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetTaskListSorted(string sortBy = "duedate", 
+        public async Task<IActionResult> GetTaskList(string sortBy = "", 
                                                            bool asc = false)
         {
             List<ToDoTask> tasks = await _toDoService.GetAllTodos();
