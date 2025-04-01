@@ -4,8 +4,8 @@ namespace ToDo.Api.Services
 {
     public interface IToDoService
     {
-        Task<List<ToDoTask>> GetAllTodos();
-        Task<List<ToDoTask>> FindTodosAsync(string searchName);
+        Task<List<ToDoTask>> GetAllTodos(int page, int pageSize);
+        Task<List<ToDoTask>> FindTodosAsync(int page, int pageSize, string searchName);
         Task<ToDoTask> FindTodosAsync(int id);
         Task AddTodoAsync(ToDoTask todo);
         Task UpdateToDoAsync(ToDoTask currTask, ToDoTask updatedTask);

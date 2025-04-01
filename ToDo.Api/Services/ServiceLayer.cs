@@ -14,15 +14,21 @@ namespace ToDo.Api.Services
             _context = context;
         }
 
-        public async Task<List<ToDoTask>> GetAllTodos()
+        public async Task<List<ToDoTask>> GetAllTodos(int page, int pageSize)
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks
+                                 .Skip((page - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
         }
 
-        public async Task<List<ToDoTask>> FindTodosAsync(string searchName)
+        public async Task<List<ToDoTask>> FindTodosAsync(int page, int pageSize, string searchName)
         {
             return await _context.Tasks.Where(task =>
-                         task.Name.ToLower().Contains(searchName.ToLower())).ToListAsync();
+                         task.Name.ToLower().Contains(searchName.ToLower()))
+                         .Skip((page - 1) * pageSize)
+                         .Take(pageSize)
+                         .ToListAsync();
         }
 
         //search method overload with ID

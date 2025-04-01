@@ -19,10 +19,10 @@ namespace ToDo.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTaskList(string sortBy = "", 
+        public async Task<IActionResult> GetTaskList(int page, int pageSize, string sortBy = "", 
                                                            bool asc = false)
         {
-            List<ToDoTask> tasks = await _toDoService.GetAllTodos();
+            List<ToDoTask> tasks = await _toDoService.GetAllTodos(page, pageSize);
 
             if (sortBy == "status")
             {
@@ -70,9 +70,9 @@ namespace ToDo.Api.Controllers
         }
 
         [HttpGet("searchByName")]
-        public async Task<IActionResult> SearchTasks(string searchName)
+        public async Task<IActionResult> SearchTasks(int page, int pageSize, string searchName)
         {
-            List<ToDoTask> tasks = await _toDoService.FindTodosAsync(searchName);
+            List<ToDoTask> tasks = await _toDoService.FindTodosAsync(page, pageSize, searchName);
             
             if (tasks.Count == 0) return NotFound();
 
