@@ -3,6 +3,7 @@ using ToDo.Api.Dtos;
 using ToDo.Api.Entities;
 using ToDo.Api.Services;
 using ToDo.Api.Mappings;
+using ToDo.Api.dtos;
 
 namespace ToDo.Api.Controllers
 {
@@ -33,7 +34,7 @@ namespace ToDo.Api.Controllers
                     if (asc)
                         return a.IsCompleted.CompareTo(b.IsCompleted);
                     else
-                        return b.IsCompleted.CompareTo(a.DueDate);
+                        return b.IsCompleted.CompareTo(a.IsCompleted);
                 });
             }
             else if (sortBy == "priority")
@@ -46,7 +47,7 @@ namespace ToDo.Api.Controllers
                     if (asc)
                         return a.Priority.CompareTo(b.Priority);
                     else
-                        return b.Priority.CompareTo(a.DueDate);
+                        return b.Priority.CompareTo(a.Priority);
                 });
             }
             else if (sortBy == "duedate")
@@ -63,7 +64,9 @@ namespace ToDo.Api.Controllers
                 });
             }
 
-            return Ok(tasks);
+            List<ToDoTaskDto> taskDtos = tasks.Select(task => task.ToTaskDto()).ToList();
+
+            return Ok(taskDtos);
         }
 
         [HttpGet("searchByName")]
@@ -73,36 +76,42 @@ namespace ToDo.Api.Controllers
             
             if (tasks.Count == 0) return NotFound();
 
-            return Ok(tasks);
+            List<ToDoTaskDto> taskDtos = tasks.Select(task => task.ToTaskDto()).ToList();
+
+            return Ok(taskDtos);
         }
 
-        [HttpGet("searchById")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> SearchTasks(int id)
         {
             ToDoTask task = await _toDoService.FindTodosAsync(id);
 
             if (task is null) return NotFound();
 
-            return Ok(task);
+            return Ok(task.ToTaskDto());
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTask(ToDoTask todo)
+        public async Task<IActionResult> CreateTask(CreateToDoTaskDto todo)
         {
-            await _toDoService.AddTodoAsync(todo);
+            ToDoTask task = todo.ToTaskEntity();
 
-            return Ok(todo);
+            await _toDoService.AddTodoAsync(task);
+
+            ToDoTaskDto taskDto = task.ToTaskDto();
+
+            return CreatedAtAction(nameof(SearchTasks), new {id = taskDto.Id}, taskDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, ToDoTask updatedTask)
+        public async Task<IActionResult> UpdateTask(int id, CreateToDoTaskDto updatedTask)
         {
             ToDoTask currTask = await _toDoService.FindTodosAsync(id);
 
-            if (currTask is not null)
-            {
-                await _toDoService.UpdateToDoAsync(currTask, updatedTask);
-            }
+            if (currTask is null)
+                return NotFound();
+
+            await _toDoService.UpdateToDoAsync(currTask, updatedTask.ToTaskEntity());
             
             return NoContent();
         }

@@ -4,9 +4,10 @@ namespace ToDo.Api.Dtos
 {
     public record class ToDoTaskDto
     {
+        public int Id { get; set; }
         public required string Name { get; set; }
-        public string Status { get; set; } = "Pending";
-        public string Priority { get; set; } = "Low";
-        public string DueDate { get; set; } = DateTime.Now.ToString("dd/MM/yyyy");
+        public required string Status { get; set; }
+        public required string Priority { get; set; }
+        public required string DueDate { get; set; }
     }
 }
