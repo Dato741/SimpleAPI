@@ -55,9 +55,9 @@ namespace ToDo.Api.Controllers
                             return a.DueDate.CompareTo(b.DueDate);
 
                         if (asc)
-                            return a.Priority.CompareTo(b.Priority);
-                        else
                             return b.Priority.CompareTo(a.Priority);
+                        else
+                            return a.Priority.CompareTo(b.Priority);
                     });
                     break;
 

@@ -4,6 +4,7 @@ using ToDo.Api.Controllers;
 using ToDo.Api.Services;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,5 +34,34 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler(config =>
+{
+    config.Run(async context =>
+    {
+        Exception? exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        HttpResponse response = context.Response;
+
+        response.ContentType = "application/json";
+
+        switch (exception)
+        {
+            case ArgumentException:
+                response.StatusCode = StatusCodes.Status400BadRequest;
+                break;
+
+            default:
+                response.StatusCode = StatusCodes.Status500InternalServerError;
+                break;
+        }
+
+        await response.WriteAsJsonAsync(new
+        {
+            error = exception?.Message,
+            statusCode = response.StatusCode
+        });
+    });
+});
+
 
 app.Run();
