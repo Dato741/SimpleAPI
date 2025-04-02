@@ -1,4 +1,4 @@
-GET http://localhost:5181/todos?page=1&pagesize=10
+GET http://localhost:5181/todos?
 
 ###
 GET http://localhost:5181/todos?page=2&pagesize=4&sortBy=status&asc=true

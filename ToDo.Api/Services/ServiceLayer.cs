@@ -22,7 +22,7 @@ namespace ToDo.Api.Services
                                  .ToListAsync();
         }
 
-        public async Task<List<ToDoTask>> FindTodosAsync(int page, int pageSize, string searchName)
+        public async Task<List<ToDoTask>> FindTodosAsync(string searchName, int page, int pageSize)
         {
             return await _context.Tasks.Where(task =>
                          task.Name.ToLower().Contains(searchName.ToLower()))
@@ -32,7 +32,7 @@ namespace ToDo.Api.Services
         }
 
         //search method overload with ID
-        public async Task<ToDoTask> FindTodosAsync(int id)
+        public async Task<ToDoTask?> FindTodosAsync(int id)
         {
             return await _context.Tasks.FindAsync(id);
         }

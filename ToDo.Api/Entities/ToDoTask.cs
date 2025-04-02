@@ -1,4 +1,4 @@
-﻿
+﻿using  ToDo.Api.Data;
 
 namespace ToDo.Api.Entities
 {
@@ -7,7 +7,7 @@ namespace ToDo.Api.Entities
         public int Id { get; set; }
         public required string Name { get; set; }
         public bool IsCompleted { get; set; }
-        public int Priority { get; set; }
+        public EPriority Priority { get; set; }
         public DateOnly DueDate { get; set; }
     }
 }
